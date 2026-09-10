@@ -1,0 +1,13 @@
+import cors from 'cors';
+import express from 'express';
+import { env } from './config/env.js';
+import { errorMiddleware } from './middleware/error.middleware.js';
+import { notFoundMiddleware } from './middleware/notFound.middleware.js';
+import { apiRouter } from './routes.js';
+const app = express();
+app.use(cors({ origin: env.FRONTEND_URL }));
+app.use(express.json());
+app.use('/api', apiRouter);
+app.use(notFoundMiddleware);
+app.use(errorMiddleware);
+export default app;
