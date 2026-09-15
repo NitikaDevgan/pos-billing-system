@@ -35,7 +35,7 @@ export function Cart({
           disabled={isEmpty}
           onClick={onClear}
         >
-          Clear cart
+          Clear cart 
         </button>
       </div>
       {isEmpty ? (
