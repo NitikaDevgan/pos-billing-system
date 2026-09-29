@@ -1,2 +1,5 @@
-import { categoryRepository } from './category.repository.js';
-export const categoryService = { list: () => categoryRepository.findAll() };
+import * as categoryRepository from "./category.repository.js";
+
+export const getCategories = async () => {
+  return categoryRepository.getAllCategories();
+};

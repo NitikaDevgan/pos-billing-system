@@ -1,3 +1,20 @@
-import type { RequestHandler } from 'express';
-import { categoryService } from './category.service.js';
-export const listCategories: RequestHandler = async (_request, response, next) => { try { response.json({ success: true, data: await categoryService.list() }); } catch (error) { next(error); } };
+import { Request, Response, NextFunction } from "express";
+import * as categoryService from "./category.service.js";
+
+
+export const getCategories = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const categories = await categoryService.getCategories();
+
+    res.status(200).json({
+      success: true,
+      data: categories,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
