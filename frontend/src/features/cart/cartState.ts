@@ -1,8 +1,8 @@
-import type { Product } from '../../constants/products';
+import type { Product } from '../products/types';
 import type { CartItem } from './types';
 
 export function addProduct(items: CartItem[], product: Product): CartItem[] {
-  if (!product.available) return items;
+  if (!product.isActive) return items;
 
   const existingItem = items.find((item) => item.productId === product.id);
   if (existingItem) {
@@ -11,23 +11,23 @@ export function addProduct(items: CartItem[], product: Product): CartItem[] {
     );
   }
 
-  return [...items, { productId: product.id, name: product.name, price: product.price, quantity: 1 }];
+  return [...items, { productId: product.id, name: product.name, price: Number(product.price), quantity: 1 }];
 }
 
-export function increaseQuantity(items: CartItem[], productId: number): CartItem[] {
+export function increaseQuantity(items: CartItem[], productId: string): CartItem[] {
   return items.map((item) =>
     item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item,
   );
 }
 
-export function decreaseQuantity(items: CartItem[], productId: number): CartItem[] {
+export function decreaseQuantity(items: CartItem[], productId: string): CartItem[] {
   return items.flatMap((item) => {
     if (item.productId !== productId) return [item];
     return item.quantity > 1 ? [{ ...item, quantity: item.quantity - 1 }] : [];
   });
 }
 
-export function removeItem(items: CartItem[], productId: number): CartItem[] {
+export function removeItem(items: CartItem[], productId: string): CartItem[] {
   return items.filter((item) => item.productId !== productId);
 }
 

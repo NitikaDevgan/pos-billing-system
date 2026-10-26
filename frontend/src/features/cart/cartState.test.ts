@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Product } from '../../constants/products';
+import type { Product } from '../products/types';
 import {
   addProduct,
   clearCart,
@@ -10,26 +10,30 @@ import {
 } from './cartState';
 
 const masalaTea: Product = {
-  id: 1,
+  id: 'masala-tea',
   name: 'Masala Tea',
-  price: 30,
-  category: 'Tea',
-  available: true,
+  price: '30.00',
+  categoryId: 'tea',
+  isActive: true,
+  createdAt: '',
+  updatedAt: '',
 };
 
 const soldOutTea: Product = {
-  id: 5,
+  id: 'green-tea',
   name: 'Green Tea',
-  price: 40,
-  category: 'Tea',
-  available: false,
+  price: '40.00',
+  categoryId: 'tea',
+  isActive: false,
+  createdAt: '',
+  updatedAt: '',
 };
 
 describe('cart state', () => {
   it('adds a product and increases its quantity when added again', () => {
     const cart = addProduct(addProduct([], masalaTea), masalaTea);
 
-    expect(cart).toEqual([{ productId: 1, name: 'Masala Tea', price: 30, quantity: 2 }]);
+    expect(cart).toEqual([{ productId: 'masala-tea', name: 'Masala Tea', price: 30, quantity: 2 }]);
   });
 
   it('does not add a sold-out product', () => {

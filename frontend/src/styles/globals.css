@@ -344,6 +344,7 @@ button:focus-visible,
   font-weight: 600;
 }
 .button:disabled { opacity: .6; }
+a.button { display: inline-flex; align-items: center; min-height: 2.75rem; text-decoration: none; }
 .button--primary { color: var(--color-surface); background: var(--color-primary); }
 .button--primary:hover:not(:disabled) { background: var(--color-success); }
 .button--secondary { border-color: var(--color-border); color: var(--color-text-primary); background: var(--color-surface); }
@@ -419,7 +420,9 @@ button:focus-visible,
   background: var(--color-surface);
 }
 .admin-sidebar__nav { display: flex; flex-direction: column; gap: var(--space-2); }
-.admin-sidebar__back { margin-top: auto; }
+.admin-sidebar__footer { display: flex; flex-direction: column; gap: var(--space-2); margin-top: auto; }
+.admin-sidebar__user { padding: 0 var(--space-3); overflow: hidden; color: var(--color-text-secondary); font-size: var(--font-size-sm); text-overflow: ellipsis; white-space: nowrap; }
+.admin-sidebar__logout { width: 100%; border: none; background: none; text-align: left; color: var(--color-danger); }
 .admin-nav-link {
   display: flex;
   align-items: center;
@@ -466,10 +469,100 @@ button:focus-visible,
 .admin-form { display: flex; flex-direction: column; gap: var(--space-4); }
 .admin-form__actions { display: flex; gap: var(--space-2); justify-content: flex-end; }
 
+.auth-page { display: grid; place-items: center; min-height: 100vh; padding: var(--space-4); }
+.auth-card {
+  width: min(24rem, 100%);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+.auth-card h1 { margin: 0; font-size: var(--font-size-xl); }
+.auth-status { padding: var(--space-6); text-align: center; }
+
+.pos-header__admin-link { color: var(--color-primary); font-weight: 600; text-decoration: none; }
+.pos-header__admin-link:hover { text-decoration: underline; }
+.pos-message { padding: var(--space-8); text-align: center; }
+
+/* ---------- Payment ---------- */
+
+.payment { display: flex; flex-direction: column; gap: var(--space-4); }
+.payment__due { display: flex; align-items: baseline; justify-content: space-between; }
+.payment__due span { color: var(--color-text-secondary); }
+.payment__due strong { color: var(--color-primary); font-size: var(--font-size-xl); }
+.payment__methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); }
+.payment__method {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: center;
+  padding: var(--space-3);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+  font-weight: 600;
+}
+.payment__method span { font-size: 1.5rem; }
+.payment__method:hover { border-color: var(--color-primary-light); }
+.payment__method--active { border-color: var(--color-primary); color: var(--color-primary); background: rgba(63, 107, 91, .08); }
+.payment__quick-cash { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.payment__quick-cash .button { flex: 1 1 4rem; }
+.payment__hint { margin: 0; padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-background); }
+.payment__success { display: flex; flex-direction: column; gap: var(--space-1); align-items: center; text-align: center; }
+.payment__success > span {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  color: var(--color-surface);
+  background: var(--color-success);
+  font-size: 1.5rem;
+}
+.payment__success p { margin: 0; }
+.payment__success strong { color: var(--color-primary); font-size: var(--font-size-lg); }
+.payment__receipt-preview {
+  max-height: 16rem;
+  overflow-y: auto;
+  padding: var(--space-3);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+/* ---------- Receipt (screen preview + print) ---------- */
+
+.receipt { color: #000; font-family: ui-monospace, 'Courier New', monospace; font-size: 12px; line-height: 1.4; }
+.receipt__header { display: flex; flex-direction: column; align-items: center; padding-bottom: 6px; border-bottom: 1px dashed #000; text-align: center; }
+.receipt__store { font-size: 14px; }
+.receipt__meta { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #000; }
+.receipt__items { width: 100%; border-collapse: collapse; }
+.receipt__items th { border-bottom: 1px dashed #000; font-weight: 700; text-align: right; }
+.receipt__items td { vertical-align: top; text-align: right; }
+.receipt__items th:first-child,
+.receipt__items td:first-child { text-align: left; }
+.receipt__items th,
+.receipt__items td { padding: 2px 0 2px 4px; }
+.receipt__totals { padding-top: 4px; border-top: 1px dashed #000; }
+.receipt__totals > div { display: flex; justify-content: space-between; }
+.receipt__grand { margin: 4px 0; padding: 4px 0; border-top: 1px dashed #000; border-bottom: 1px dashed #000; font-size: 14px; font-weight: 700; }
+.receipt__footer { padding-top: 8px; text-align: center; }
+
+.print-area { display: none; }
+
+@media print {
+  /* 80mm is the standard thermal roll width; regular printers just print a narrow column. */
+  @page { size: 80mm auto; margin: 4mm; }
+  body { min-width: 0; background: #fff; }
+  body > *:not(.print-area) { display: none !important; }
+  .print-area { display: block; }
+}
+
 @media (max-width: 760px) {
   .admin-layout { grid-template-columns: 1fr; }
   .admin-sidebar { flex-direction: row; flex-wrap: wrap; align-items: center; border-right: none; border-bottom: 1px solid var(--color-border); }
   .admin-sidebar__nav { flex-direction: row; }
-  .admin-sidebar__back { margin-top: 0; margin-left: auto; }
+  .admin-sidebar__footer { flex-direction: row; align-items: center; margin-top: 0; margin-left: auto; }
+  .admin-sidebar__logout { width: auto; }
   .admin-content { padding: var(--space-4); overflow-x: auto; }
 }

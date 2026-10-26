@@ -1,4 +1,4 @@
-import type { Product } from '../../../constants/products';
+import type { Product } from '../../products/types';
 import { ProductCard } from './ProductCard';
 
 interface ProductGridProps {

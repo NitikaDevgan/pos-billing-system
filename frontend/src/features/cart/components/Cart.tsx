@@ -5,9 +5,9 @@ import { CartSummary } from "./CartSummary";
 interface CartProps {
   items: CartItemType[];
   subtotal: number;
-  onIncrease: (productId: number) => void;
-  onDecrease: (productId: number) => void;
-  onRemove: (productId: number) => void;
+  onIncrease: (productId: string) => void;
+  onDecrease: (productId: string) => void;
+  onRemove: (productId: string) => void;
   onClear: () => void;
   onPay: () => void;
 }

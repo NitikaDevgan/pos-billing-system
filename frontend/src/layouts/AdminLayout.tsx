@@ -1,11 +1,14 @@
 import { NavLink, Outlet } from 'react-router-dom';
+import { useAuth } from '../features/auth/AuthContext';
 
 const navItems = [
-  { to: '/admin/categories', label: 'Categories' },
   { to: '/admin/products', label: 'Products' },
+  { to: '/admin/categories', label: 'Categories' },
 ];
 
 export function AdminLayout() {
+  const { user, logout } = useAuth();
+
   return (
     <div className="admin-layout">
       <aside className="admin-sidebar">
@@ -17,7 +20,11 @@ export function AdminLayout() {
             </NavLink>
           ))}
         </nav>
-        <NavLink className="admin-nav-link admin-sidebar__back" to="/">← Back to POS</NavLink>
+        <div className="admin-sidebar__footer">
+          <span className="admin-sidebar__user" title={user?.email}>{user?.name}</span>
+          <NavLink className="admin-nav-link" to="/">← Back to POS</NavLink>
+          <button className="admin-nav-link admin-sidebar__logout" type="button" onClick={logout}>Log out</button>
+        </div>
       </aside>
       <div className="admin-content"><Outlet /></div>
     </div>

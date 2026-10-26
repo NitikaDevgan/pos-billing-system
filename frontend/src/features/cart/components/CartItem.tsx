@@ -3,9 +3,9 @@ import type { CartItem as CartItemType } from '../types';
 
 interface CartItemProps {
   item: CartItemType;
-  onIncrease: (productId: number) => void;
-  onDecrease: (productId: number) => void;
-  onRemove: (productId: number) => void;
+  onIncrease: (productId: string) => void;
+  onDecrease: (productId: string) => void;
+  onRemove: (productId: string) => void;
 }
 
 export function CartItem({ item, onIncrease, onDecrease, onRemove }: CartItemProps) {

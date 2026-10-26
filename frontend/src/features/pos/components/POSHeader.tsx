@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export function POSHeader() {
   const [currentTime, setCurrentTime] = useState(() => new Date());
@@ -15,6 +16,7 @@ export function POSHeader() {
         <h1>CAFÉ POS &amp; BILLING</h1>
       </div>
       <div className="pos-header__meta">
+        <Link className="pos-header__admin-link" to="/admin">Manage menu</Link>
         <span className="status-pill"><span aria-hidden="true" />Online</span>
         <time dateTime={currentTime.toISOString()}>
           {currentTime.toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' })}
