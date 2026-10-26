@@ -6,6 +6,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  CASHIER
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(CASHIER)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 model Category {
   id        String    @id @default(uuid())
   name      String    @unique
@@ -22,8 +38,46 @@ model Product {
   isActive   Boolean  @default(true)
   categoryId String
   category   Category @relation(fields: [categoryId], references: [id])
+  orderItems OrderItem[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   @@index([categoryId])
+}
+
+enum PaymentMethod {
+  CASH
+  UPI
+  CARD
+}
+
+model Order {
+  id             String        @id @default(uuid())
+  billNumber     Int           @unique @default(autoincrement())
+  subtotal       Decimal       @db.Decimal(10, 2)
+  total          Decimal       @db.Decimal(10, 2)
+  paymentMethod  PaymentMethod
+  /// Cash handed over by the customer; null for UPI / card.
+  amountReceived Decimal?      @db.Decimal(10, 2)
+  changeDue      Decimal?      @db.Decimal(10, 2)
+  items          OrderItem[]
+  createdAt      DateTime      @default(now())
+
+  @@index([createdAt])
+}
+
+/// Name and price are copied at sale time so old bills stay correct after menu edits or deletes.
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  name      String
+  unitPrice Decimal  @db.Decimal(10, 2)
+  quantity  Int
+  lineTotal Decimal  @db.Decimal(10, 2)
+
+  @@index([orderId])
+  @@index([productId])
 }

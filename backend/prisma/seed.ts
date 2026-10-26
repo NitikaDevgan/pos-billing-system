@@ -1,48 +1,19 @@
-import { PrismaClient } from "@prisma/client";
+import { addMissingStarterMenu, upsertAdmin } from "../src/bootstrap/firstRun.js";
+import { prisma } from "../src/config/database.js";
 
-const prisma = new PrismaClient();
-
+// Manual re-run of the first-time setup: resets the admin password from .env
+// and re-adds any starter menu items that are missing (existing items are left untouched).
 async function main() {
-  const tea = await prisma.category.upsert({
-    where: { name: "Tea" },
-    update: {},
-    create: {
-      name: "Tea",
-    },
-  });
-
-  const snacks = await prisma.category.upsert({
-    where: { name: "Snacks" },
-    update: {},
-    create: {
-      name: "Snacks",
-    },
-  });
-
-  await prisma.product.createMany({
-    data: [
-      {
-        name: "Masala Tea",
-        price: 30,
-        categoryId: tea.id,
-      },
-      {
-        name: "Ginger Tea",
-        price: 35,
-        categoryId: tea.id,
-      },
-      {
-        name: "Bun Maska",
-        price: 50,
-        categoryId: snacks.id,
-      },
-    ],
-    skipDuplicates: true,
-  });
+  await upsertAdmin();
+  await addMissingStarterMenu();
+  console.log("Seed complete.");
 }
 
 main()
-  .catch(console.error)
+  .catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  })
   .finally(async () => {
     await prisma.$disconnect();
   });

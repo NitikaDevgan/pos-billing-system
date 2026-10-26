@@ -1,1 +1,1 @@
-export const logger = { info: (message: string) => console.info(message), error: (error: unknown) => console.error(error) };
+export const logger = { info: (message: string) => console.info(message), warn: (message: string) => console.warn(message), error: (error: unknown) => console.error(error) };
